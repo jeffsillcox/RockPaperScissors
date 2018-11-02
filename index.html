@@ -6,7 +6,11 @@
     </head>
     <body>
         <script>
-            
+            let playerWins = 0;
+            let computerWins = 0;
+            let numberRounds = 5;
+            let round;
+
             // Randomize Rock, paper, or scissors
             function computerPlay() {
                 let num = Math.random() * 3;
@@ -19,20 +23,30 @@
                 }
             }
             
+            
+            
             // Play one round of RPS
             function playRound(playerSelection, computerSelection) {
                 playerSelection = playerSelection[0].toUpperCase() + playerSelection.toLowerCase().slice(1);
-                
+
+                // Win and lose string creation and counter
                 function win() {
+                    playerWins++;
                     return('You win! ' + playerSelection + ' beats ' + computerSelection);
                 }
 
                 function lose() {
+                    computerWins++;
                     return('You lose! ' + computerSelection + ' beats ' + playerSelection);
                 }
 
+                function tie() {
+                    return(playerSelection + ' vs ' + computerSelection + '. It\'s a tie!');
+                }
+                
+                // Test selections
                 if (playerSelection === computerSelection) {
-                    return('It\'s a tie!');
+                    return (tie());
                 } else if (playerSelection === 'Rock') {
                     return (computerSelection === 'Paper' ? lose() : win());
                 } else if (playerSelection === 'Paper') {
@@ -40,23 +54,35 @@
                 } else if (playerSelection === 'Scissors') {
                     return (computerSelection === 'Rock' ? lose() : win());
                 } else {
-                    return('Learn how to type?');
+                    return('reenter');
                 }
             }
             
             // Play RPS
             function game() {
-                const playerSelection = 'rock';
-                const computerSelection = computerPlay();
-
-                for (var rounds = 0; rounds < 5; rounds++) {
-                    console.log(playRound(playerSelection, computerSelection));
+                for (var round = 1; round <= numberRounds; round++) {
+                    let computerSelection = computerPlay();
+                    let playerSelection = prompt('Round ' + round + ', enter Rock, paper, or scissors.');
+                    let message = playRound(playerSelection, computerSelection);
+                    console.log(message);
+                    if (message.slice(-4) === 'tie!' || message === "reenter") {
+                        round--;
+                        continue;
+                    }
                 }
-
             }
-
             
+            // Run the game
             game();
+
+            console.log('Player wins: ' + playerWins);
+            console.log('Computer wins: ' + computerWins);
+
+            if (playerWins > computerWins) {
+                console.log('You win!');
+            } else {
+                console.log('Computer wins!');
+            }
 
         </script>
     </body>
